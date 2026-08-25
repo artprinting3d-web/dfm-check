@@ -1,0 +1,119 @@
+name: 'EF DFM Check'
+description: >-
+  Design-for-manufacturing review for hardware-as-code: STL/3MF/OBJ/PLY meshes, OpenSCAD and
+  CadQuery models, KiCad boards and Klipper printer.cfg — every finding cited back to a rule id.
+author: 'Edufacturing'
+branding:
+  icon: 'check-circle'
+  color: 'orange'
+
+inputs:
+  base:
+    description: 'Git ref to diff against. Defaults to the pull request base branch.'
+    required: false
+    default: ''
+  head:
+    description: 'Git ref to analyse.'
+    required: false
+    default: 'HEAD'
+  fail-on:
+    description: 'error | warn | never — which severity fails the job.'
+    required: false
+    default: 'error'
+  technology:
+    description: 'fdm | sla | sls | dmls. Decides which process rules apply to meshes.'
+    required: false
+    default: ''
+  material:
+    description: 'Material id, e.g. pla, abs, petg. Tightens or loosens the overhang limit.'
+    required: false
+    default: ''
+  printer-id:
+    description: 'Printer id from the Edufacturing printer library — enables the build volume check.'
+    required: false
+    default: ''
+  render:
+    description: '1 to render OpenSCAD/CadQuery models, 0 to skip them.'
+    required: false
+    default: '1'
+  engine-url:
+    description: 'Analysis engine base URL.'
+    required: false
+    default: 'https://edufacturing.com/api/engine'
+  engine-key:
+    description: 'Shared secret for the analysis engine, if your deployment needs one. Pass a repository secret.'
+    required: false
+    default: ''
+  max-files:
+    description: 'How many changed hardware files one run analyses.'
+    required: false
+    default: '25'
+  working-directory:
+    description: 'Directory to analyse.'
+    required: false
+    default: '.'
+
+outputs:
+  errors:
+    description: 'Number of error-level findings.'
+    value: ${{ steps.dfm.outputs.errors }}
+  warnings:
+    description: 'Number of warning-level findings.'
+    value: ${{ steps.dfm.outputs.warnings }}
+  notices:
+    description: 'Number of notice-level findings.'
+    value: ${{ steps.dfm.outputs.notices }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+
+    # The action has no runtime dependencies, so this only ever compiles TypeScript,
+    # and only when a tagged release did not already ship dist/.
+    - name: Build the checker
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: |
+        if [ ! -f dist/cli.js ]; then
+          npm ci --no-audit --no-fund
+          npm run build
+        fi
+
+    # OpenSCAD is a 30-second apt install, so it is done here. CadQuery is not: it pulls
+    # OpenCascade and takes minutes, which is not something to spend on every run of every
+    # repository that has no CadQuery in it. Add your own `pip install cadquery` step
+    # before this one if you want .py models analysed; the check skips them cleanly
+    # otherwise and says so, rather than reporting them as broken.
+    - name: Install OpenSCAD
+      if: ${{ inputs.render == '1' }}
+      shell: bash
+      run: |
+        if ! command -v openscad >/dev/null 2>&1; then
+          if [ "$RUNNER_OS" = "Linux" ]; then
+            sudo apt-get update -qq && sudo apt-get install -y -qq openscad
+          else
+            echo "::notice::OpenSCAD is not installed on $RUNNER_OS runners; .scad files will be skipped."
+          fi
+        fi
+
+    - name: Run the DFM check
+      id: dfm
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        INPUT_BASE: ${{ inputs.base }}
+        INPUT_HEAD: ${{ inputs.head }}
+        INPUT_FAIL_ON: ${{ inputs.fail-on }}
+        INPUT_TECHNOLOGY: ${{ inputs.technology }}
+        INPUT_MATERIAL: ${{ inputs.material }}
+        INPUT_PRINTER_ID: ${{ inputs.printer-id }}
+        INPUT_RENDER: ${{ inputs.render }}
+        INPUT_ENGINE_URL: ${{ inputs.engine-url }}
+        INPUT_ENGINE_KEY: ${{ inputs.engine-key }}
+        INPUT_MAX_FILES: ${{ inputs.max-files }}
+        GITHUB_BASE_REF: ${{ github.base_ref }}
+      run: node "${{ github.action_path }}/dist/cli.js"

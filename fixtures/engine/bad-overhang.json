@@ -1,0 +1,179 @@
+{
+  "file": "bad-overhang.stl",
+  "format": "stl",
+  "normalization": {
+    "welded": true,
+    "vertices_before": 72,
+    "vertices_after": 16
+  },
+  "technology": "fdm",
+  "material_id": null,
+  "printer_id": null,
+  "metrics": {
+    "triangles": 24,
+    "vertices": 16,
+    "bbox_mm": {
+      "min": [
+        -30,
+        -5,
+        0
+      ],
+      "max": [
+        30,
+        5,
+        19
+      ],
+      "size": [
+        60,
+        10,
+        19
+      ]
+    },
+    "volume_mm3": 4400,
+    "area_mm2": 2660,
+    "watertight": true,
+    "open_edges": 0,
+    "degenerate_triangles": 0,
+    "orphan_vertices": 0,
+    "bodies": 2,
+    "body_details": [
+      {
+        "index": 0,
+        "triangles": 12,
+        "volume": 3000,
+        "size": [
+          60,
+          10,
+          5
+        ],
+        "watertight": true
+      },
+      {
+        "index": 1,
+        "triangles": 12,
+        "volume": 1400.0000000000002,
+        "size": [
+          10,
+          10,
+          14
+        ],
+        "watertight": true
+      }
+    ],
+    "units_guess": {
+      "unit": "mm",
+      "basis": "assumed",
+      "note_en": "STL/OBJ/PLY carry no unit; millimetres assumed by convention.",
+      "rule_id": null
+    }
+  },
+  "thin_walls": {
+    "area_pct": 0,
+    "min_mm": 5,
+    "median_mm": 10,
+    "min_required_mm": 0.8,
+    "rule_id": "dfam.fdm.wall_thickness",
+    "samples": 1200,
+    "measured": 1152,
+    "sampling_rule_id": "heuristic.wall_sample_count"
+  },
+  "overhangs": {
+    "area_pct": 22.55639097744361,
+    "severe_area_pct": 22.55639097744361,
+    "max_deg": 90,
+    "flagged_area_mm2": 600,
+    "severe_area_mm2": 600,
+    "total_area_mm2": 2660,
+    "projected_area_mm2": 600,
+    "reference_frame": "from_vertical",
+    "rule_id": "dfam.fdm.overhang_angle",
+    "rule_ids": [
+      "dfam.fdm.overhang_angle",
+      "dfam.orientation.overhang_reference_frame",
+      "overhang.fdm_cooled_pla_max"
+    ],
+    "bed_band": {
+      "mm": 0.3,
+      "rule_id": "heuristic.bed_contact_band_mm"
+    },
+    "supported_by_powder": false
+  },
+  "orientation": {
+    "suggested_rotation_deg": [
+      90,
+      0,
+      0
+    ],
+    "changed": true,
+    "score_before": 85,
+    "score_after": 100,
+    "overhang_pct_before": 22.55639097744361,
+    "overhang_pct_after": 0,
+    "build_height_before_mm": 19,
+    "build_height_after_mm": 10,
+    "rule_ids": [
+      "orientation.minimize_support_volume",
+      "orientation.minimize_build_height",
+      "orientation.load_perpendicular_to_layers",
+      "dfam.orientation.fdm_anisotropy_z_pct"
+    ],
+    "weights_are_heuristic": true
+  },
+  "support": {
+    "contact_area_cm2": 6,
+    "volume_cm3_est": 1.26,
+    "max_drop_mm": 14,
+    "hard_to_remove_contacts": 0,
+    "hard_to_remove_rule_id": "dfam.support_removal.tool_access_clearance_mm",
+    "tool_access_min_mm": 2.5,
+    "infill_fraction": 0.15,
+    "infill_rule_id": "heuristic.support_infill_fraction",
+    "overhang_triangles": 2
+  },
+  "fit_check": null,
+  "material_check": null,
+  "score": 85,
+  "flags": [
+    {
+      "severity": "error",
+      "code": "overhang",
+      "msg_en": "22.6% of the surface overhangs beyond the 45° limit measured from vertical (steepest: 90°); 22.6% is past the cooled-PLA limit and will sag even with active cooling.",
+      "fix_en": "Rotate by [90, 0, 0]° — overhang area drops to 0.0%.",
+      "rule_id": "dfam.fdm.overhang_angle",
+      "source": null
+    },
+    {
+      "severity": "warn",
+      "code": "aspect_ratio",
+      "msg_en": "Longest-to-thinnest axis ratio is 6.0:1, above the 3:1 tall-and-thin threshold.",
+      "fix_en": "Consider a lying orientation or a brim for a wider base.",
+      "rule_id": "dfam.fdm.tall_thin_ratio",
+      "source": null
+    },
+    {
+      "severity": "info",
+      "code": "multiple_bodies",
+      "msg_en": "Model contains 2 disconnected bodies.",
+      "fix_en": "Confirm this is intended; otherwise weld the parts or split the file.",
+      "rule_id": null,
+      "source": "mesh topology (konvertor-3d splitBodies)"
+    }
+  ],
+  "not_evaluated": [
+    {
+      "code": "bridge_length",
+      "why_en": "Bridge spans are orientation- and slicer-dependent and cannot be read reliably from a mesh; the canonical rule exists but the engine does not claim a measurement.",
+      "rule_id": "dfam.fdm.bridge_length"
+    },
+    {
+      "code": "hole_diameter",
+      "why_en": "Hole diameters require feature recognition (a mesh has no holes, only triangles). Use the parameter-level check in the CAD stage instead.",
+      "rule_id": "dfam.fdm.hole_diameter"
+    },
+    {
+      "code": "assembly_clearance",
+      "why_en": "Clearance is a between-parts quantity; a single uploaded body carries no mating partner.",
+      "rule_id": "dfam.fdm.clearance"
+    }
+  ]
+}

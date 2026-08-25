@@ -1,0 +1,26 @@
+{
+  "name": "edufacturing-dfm-check",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "EF DFM Check — GitHub App + Action: design-for-manufacturing review as CI for hardware-as-code repositories (STL/3MF, OpenSCAD, CadQuery, KiCad, Klipper printer.cfg), every verdict cited back to a rule id in the EDi Brain rules core.",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/server.js",
+    "cli": "node dist/cli.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "check:vendor": "node scripts/vendor-diff.mjs",
+    "check:listing": "node scripts/check-listing.mjs",
+    "gen:rules": "node scripts/gen-pcb-rules.mjs",
+    "fixtures": "node fixtures/make-fixtures.mjs",
+    "mutate": "bash scripts/mutate.sh"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.9"
+  }
+}

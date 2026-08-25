@@ -1,0 +1,68 @@
+{
+  "ok": true,
+  "service": "print-engine",
+  "endpoints": [
+    "/v1/inspect",
+    "/v1/convert",
+    "/v1/heal",
+    "/v1/printability",
+    "/v1/printers",
+    "/v1/materials"
+  ],
+  "input_formats": [
+    "3mf",
+    "amf",
+    "dae",
+    "glb",
+    "gltf",
+    "obj",
+    "off",
+    "ply",
+    "stl"
+  ],
+  "output_formats": [
+    "stl",
+    "stl-ascii",
+    "3mf",
+    "obj",
+    "ply",
+    "ply-ascii",
+    "off",
+    "glb",
+    "amf",
+    "dae"
+  ],
+  "technologies": [
+    "fdm",
+    "sla",
+    "sls",
+    "dmls"
+  ],
+  "max_upload_bytes": 52428800,
+  "rules_core": {
+    "source": "EDi Brain rules core (Wiki/dist/edufacturing-rules.json)",
+    "version": 1,
+    "rules_in_core": 4128,
+    "cited_by_engine": 20
+  },
+  "libraries": {
+    "printers": {
+      "source": "edufacturing-printer-library",
+      "count": 927
+    },
+    "materials": {
+      "source": "edufacturing-material-library",
+      "count": 36
+    }
+  },
+  "heuristics": [
+    "heuristic.bed_contact_band_mm",
+    "heuristic.overhang_report_min_pct",
+    "heuristic.wall_sample_count",
+    "heuristic.support_infill_fraction",
+    "heuristic.score_penalty_thin_wall",
+    "heuristic.score_penalty_does_not_fit",
+    "heuristic.score_penalty_aspect",
+    "heuristic.units_guess_min_mm"
+  ]
+}

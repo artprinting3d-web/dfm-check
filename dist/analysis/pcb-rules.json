@@ -1,0 +1,108 @@
+{
+    "source": "EDi Brain rules core (Wiki/dist/edufacturing-rules.json)",
+    "core_version": 1,
+    "rules_in_core": 4128,
+    "generated_from": "c:/Users/user/Documents/Edufacturing_HUB/Wiki/dist/edufacturing-rules.json",
+    "rules": {
+        "electronics.min_trace_width_ipc_class2": {
+            "id": "electronics.min_trace_width_ipc_class2",
+            "parameter": "min_trace_width_mm",
+            "constraint": {
+                "op": ">=",
+                "value": 0.1,
+                "unit": "mm"
+            },
+            "severity": "error",
+            "citation": "IPC-2221B:2012 §6.2.2, Table 6-2 (Minimum Conductor Width, Class 2)",
+            "source": "IPC-2221B:2012"
+        },
+        "electronics.min_trace_space_ipc_class2": {
+            "id": "electronics.min_trace_space_ipc_class2",
+            "parameter": "min_trace_space_mm",
+            "constraint": {
+                "op": ">=",
+                "value": 0.1,
+                "unit": "mm"
+            },
+            "severity": "error",
+            "citation": "IPC-2221B:2012 §6.2.3, Table 6-3 (Minimum Conductor Spacing, Class 2)",
+            "source": "IPC-2221B:2012"
+        },
+        "electronics.min_annular_ring_ipc_class2": {
+            "id": "electronics.min_annular_ring_ipc_class2",
+            "parameter": "min_annular_ring_mm",
+            "constraint": {
+                "op": ">=",
+                "value": 0.05,
+                "unit": "mm"
+            },
+            "severity": "error",
+            "citation": "IPC-2221B:2012 §9.1.5, Table 9-1 (Minimum Annular Ring, Class 2); IPC-6012D §3.3.1",
+            "source": "IPC-2221B:2012"
+        },
+        "electronics.min_annular_ring_ipc_class3": {
+            "id": "electronics.min_annular_ring_ipc_class3",
+            "parameter": "min_annular_ring_mm",
+            "constraint": {
+                "op": ">=",
+                "value": 0.1,
+                "unit": "mm"
+            },
+            "severity": "error",
+            "citation": "IPC-2221B:2012 §9.1.5, Table 9-1 (Minimum Annular Ring, Class 3); IPC-6012D §3.3.1",
+            "source": "IPC-2221B:2012"
+        },
+        "electronics.trace_width_1A_10C_external_min": {
+            "id": "electronics.trace_width_1A_10C_external_min",
+            "parameter": "trace_width_mm",
+            "constraint": {
+                "op": ">=",
+                "value": 0.3,
+                "unit": "mm"
+            },
+            "severity": "warn",
+            "citation": "IPC-2221B:2012 §6.2.1, Chart 2a; Saturn PCB Design Toolkit verification",
+            "source": "IPC-2221B:2012"
+        },
+        "electronics.thermal_via_drill_size": {
+            "id": "electronics.thermal_via_drill_size",
+            "parameter": "thermal_via_drill_diameter_mm",
+            "constraint": {
+                "op": "range",
+                "value": [
+                    0.2,
+                    0.4
+                ],
+                "unit": "mm"
+            },
+            "severity": "info",
+            "citation": "IPC-2221B:2012 §9.4.3; JEDEC JEP30P:2015 §5.3; Texas Instruments SLUA566A (Thermal via guidelines)",
+            "source": "IPC-2221B:2012; JEDEC JEP30P:2015"
+        },
+        "electronics.creepage_clearance_0_50V": {
+            "id": "electronics.creepage_clearance_0_50V",
+            "parameter": "min_clearance_mm",
+            "constraint": {
+                "op": ">=",
+                "value": 0.1,
+                "unit": "mm"
+            },
+            "severity": "error",
+            "citation": "IPC-2221B:2012 Table 6-1, Condition B1 (internal, altitude ≤3050m, uncoated); IEC 60664-1:2020 §4.3",
+            "source": "IPC-2221B:2012"
+        },
+        "ecad.kicad.drc_zero_violations_gate": {
+            "id": "ecad.kicad.drc_zero_violations_gate",
+            "parameter": "drc_error_violations_count",
+            "constraint": {
+                "op": "==",
+                "value": 0,
+                "unit": "violations_with_severity_error",
+                "note": "парсни kicad-cli pcb drc --format json изхода explicit: violations[] масив без нито един severity==\"error\" запис + unconnected_items[] празен; exit code на kicad-cli е 0 ДОРИ при violations — НЕ е валиден gate detector"
+            },
+            "severity": "error",
+            "citation": "concepts/ecad-kicad.md §kicad-cli секция — 1. DRC; §Gate дефиниция",
+            "source": "Wiki/experiments/2026-07-21--ecad-dryruns/FINDINGS.md §3.1 (DRC JSON схема)"
+        }
+    }
+}

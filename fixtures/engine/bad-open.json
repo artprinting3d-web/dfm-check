@@ -1,0 +1,152 @@
+{
+  "file": "bad-open.stl",
+  "format": "stl",
+  "normalization": {
+    "welded": true,
+    "vertices_before": 30,
+    "vertices_after": 8
+  },
+  "technology": "fdm",
+  "material_id": null,
+  "printer_id": null,
+  "metrics": {
+    "triangles": 10,
+    "vertices": 8,
+    "bbox_mm": {
+      "min": [
+        0,
+        0,
+        0
+      ],
+      "max": [
+        20,
+        20,
+        20
+      ],
+      "size": [
+        20,
+        20,
+        20
+      ]
+    },
+    "volume_mm3": 5333.333333333333,
+    "area_mm2": 2000,
+    "watertight": false,
+    "open_edges": 4,
+    "degenerate_triangles": 0,
+    "orphan_vertices": 0,
+    "bodies": 1,
+    "body_details": [
+      {
+        "index": 0,
+        "triangles": 10,
+        "volume": 5333.333333333333,
+        "size": [
+          20,
+          20,
+          20
+        ],
+        "watertight": false
+      }
+    ],
+    "units_guess": {
+      "unit": "mm",
+      "basis": "assumed",
+      "note_en": "STL/OBJ/PLY carry no unit; millimetres assumed by convention.",
+      "rule_id": null
+    }
+  },
+  "thin_walls": {
+    "area_pct": 0,
+    "min_mm": 20,
+    "median_mm": 20,
+    "min_required_mm": 0.8,
+    "rule_id": "dfam.fdm.wall_thickness",
+    "samples": 1200,
+    "measured": 960,
+    "sampling_rule_id": "heuristic.wall_sample_count"
+  },
+  "overhangs": {
+    "area_pct": 0,
+    "severe_area_pct": 0,
+    "max_deg": 90,
+    "flagged_area_mm2": 0,
+    "severe_area_mm2": 0,
+    "total_area_mm2": 2000,
+    "projected_area_mm2": 0,
+    "reference_frame": "from_vertical",
+    "rule_id": "dfam.fdm.overhang_angle",
+    "rule_ids": [
+      "dfam.fdm.overhang_angle",
+      "dfam.orientation.overhang_reference_frame",
+      "overhang.fdm_cooled_pla_max"
+    ],
+    "bed_band": {
+      "mm": 0.3,
+      "rule_id": "heuristic.bed_contact_band_mm"
+    },
+    "supported_by_powder": false
+  },
+  "orientation": {
+    "suggested_rotation_deg": [
+      0,
+      0,
+      0
+    ],
+    "changed": false,
+    "score_before": 60,
+    "score_after": 60,
+    "overhang_pct_before": 0,
+    "overhang_pct_after": 0,
+    "build_height_before_mm": 20,
+    "build_height_after_mm": 20,
+    "rule_ids": [
+      "orientation.minimize_support_volume",
+      "orientation.minimize_build_height",
+      "orientation.load_perpendicular_to_layers",
+      "dfam.orientation.fdm_anisotropy_z_pct"
+    ],
+    "weights_are_heuristic": true
+  },
+  "support": {
+    "contact_area_cm2": 0,
+    "volume_cm3_est": 0,
+    "max_drop_mm": 0,
+    "hard_to_remove_contacts": 0,
+    "hard_to_remove_rule_id": "dfam.support_removal.tool_access_clearance_mm",
+    "tool_access_min_mm": 2.5,
+    "infill_fraction": 0.15,
+    "infill_rule_id": "heuristic.support_infill_fraction",
+    "overhang_triangles": 0
+  },
+  "fit_check": null,
+  "material_check": null,
+  "score": 60,
+  "flags": [
+    {
+      "severity": "error",
+      "code": "not_watertight",
+      "msg_en": "Mesh is not closed: 4 open edge(s), 0 degenerate triangle(s). Volume, wall thickness and support estimates are unreliable on an open mesh.",
+      "fix_en": "Run POST /v1/heal first, or repair in the CAD/mesh tool before slicing.",
+      "rule_id": null,
+      "source": "mesh topology (konvertor-3d health)"
+    }
+  ],
+  "not_evaluated": [
+    {
+      "code": "bridge_length",
+      "why_en": "Bridge spans are orientation- and slicer-dependent and cannot be read reliably from a mesh; the canonical rule exists but the engine does not claim a measurement.",
+      "rule_id": "dfam.fdm.bridge_length"
+    },
+    {
+      "code": "hole_diameter",
+      "why_en": "Hole diameters require feature recognition (a mesh has no holes, only triangles). Use the parameter-level check in the CAD stage instead.",
+      "rule_id": "dfam.fdm.hole_diameter"
+    },
+    {
+      "code": "assembly_clearance",
+      "why_en": "Clearance is a between-parts quantity; a single uploaded body carries no mating partner.",
+      "rule_id": "dfam.fdm.clearance"
+    }
+  ]
+}
