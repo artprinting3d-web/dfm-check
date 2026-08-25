@@ -14,6 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Проверката сравнява с базовия клон. Без пълна история `git diff`
+          # не вижда нищо и стъпката тихо казва „няма променени файлове".
+          fetch-depth: 0
+
+      - name: What does git actually see
+        run: |
+          echo "--- refs:"; git rev-parse --abbrev-ref HEAD; git rev-parse origin/main 2>&1 | head -1
+          echo "--- diff origin/main...HEAD:"; git diff --name-status origin/main...HEAD 2>&1 | head
+          echo "--- diff HEAD~1..HEAD:"; git diff --name-status HEAD~1 HEAD 2>&1 | head
 
       - name: Run Printability Check from the published tag
         id: check
@@ -23,7 +33,6 @@ jobs:
           material: pla
           fail-on: never          # самотестът докладва, не блокира
           render: '0'             # без OpenSCAD — тук няма .scad за рендер
-          working-directory: examples
 
       - name: Show what it found
         run: |
