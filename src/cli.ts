@@ -170,7 +170,34 @@ export async function main(argv: string[]): Promise<number> {
 
   const analysable = files.filter((f) => analyzerFor(f.path, f.content) !== null);
   if (!analysable.length) {
-    process.stdout.write('::notice::No hardware files changed — nothing for the DFM check to look at.\n');
+    // Тези две са РАЗЛИЧНИ състояния и досега се сливаха в едно съобщение:
+    // „нищо не е променено" срещу „променени са файлове, но нито един не може
+    // да бъде анализиран". Второто е дефект в настройката или във файла и
+    // трябва да се вижда, а не да се чете като „всичко е наред".
+    if (!paths.length) {
+      process.stdout.write('::notice::No files changed in this diff — nothing for the DFM check to look at.\n');
+    } else if (!claimed.length) {
+      process.stdout.write(
+        '::notice::' +
+          escapeData(
+            paths.length +
+              ' file(s) changed, none of a kind this check reads (meshes, .scad, CadQuery .py, .kicad_pcb, printer.cfg): ' +
+              paths.slice(0, 10).join(', '),
+          ) +
+          '\n',
+      );
+    } else {
+      process.stdout.write(
+        '::warning::' +
+          escapeData(
+            claimed.length +
+              ' hardware file(s) changed but none could be read or recognised: ' +
+              claimed.slice(0, 10).join(', ') +
+              '. A mesh that fails to parse lands here — check the file, and that the job has it on disk.',
+          ) +
+          '\n',
+      );
+    }
     setOutput('errors', '0');
     setOutput('warnings', '0');
     return 0;
