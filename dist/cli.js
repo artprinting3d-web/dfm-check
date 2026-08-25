@@ -7,10 +7,15 @@ import { conclusionFor, runAnalysis } from './analysis/run.js';
 import { buildSummary } from './report/summary.js';
 import { provenanceLine } from './report/annotations.js';
 import { runProcess } from './analysis/render.js';
-function input(name, fallback = '') {
-    // The Action passes inputs as INPUT_<NAME>; the plain env var is honoured too.
+export function input(name, fallback = '') {
+    // GitHub Actions ПОДАВА всеки незададен вход като ПРАЗЕН НИЗ, не като липсващ.
+    // С `??` празният низ минаваше за стойност и биеше подразбирането: `base`
+    // ставаше '' и diff-ът се превръщаше в `...HEAD`, тоест празен — проверката
+    // мълчаливо не намираше нищо в НИТО ЕДИН pull request. Затова празно = липсва.
     const actionVar = 'INPUT_' + name.toUpperCase().replace(/-/g, '_');
-    return process.env[actionVar] ?? process.env[name.toUpperCase().replace(/-/g, '_')] ?? fallback;
+    const plain = name.toUpperCase().replace(/-/g, '_');
+    const pick = (v) => (typeof v === 'string' && v.trim() !== '' ? v : null);
+    return pick(process.env[actionVar]) ?? pick(process.env[plain]) ?? fallback;
 }
 function readOptions(argv) {
     const explicit = argv.filter((a) => !a.startsWith('-'));
