@@ -27,7 +27,6 @@ jobs:
           material: pla
           fail-on: never          # самотестът докладва, не блокира
           render: '0'             # без OpenSCAD — тук няма .scad за рендер
-          working-directory: examples
 
       - name: Show what it found
         run: |
