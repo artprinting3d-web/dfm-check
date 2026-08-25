@@ -1,0 +1,32 @@
+# Пуска Action-а ПО ПУБЛИЧНИЯ МУ АДРЕС (не по локалния път), защото точно това
+# прави всеки чужд репозиторий. Ако тагът `v1` или `dist/` в него са счупени,
+# този билд пада — тоест проверката не е декор.
+name: Self-test (public @v1)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  dfm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Printability Check from the published tag
+        id: check
+        uses: artprinting3d-web/dfm-check@v1
+        with:
+          technology: fdm
+          material: pla
+          fail-on: never          # самотестът докладва, не блокира
+          render: '0'             # без OpenSCAD — тук няма .scad за рендер
+          working-directory: examples
+
+      - name: Show what it found
+        run: |
+          echo "errors=${{ steps.check.outputs.errors }}"
+          echo "warnings=${{ steps.check.outputs.warnings }}"
+          echo "notices=${{ steps.check.outputs.notices }}"
