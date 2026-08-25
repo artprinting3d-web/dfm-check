@@ -27,7 +27,7 @@ jobs:
 
       - name: Run Printability Check from the published tag
         id: check
-        uses: artprinting3d-web/dfm-check@v1.0.1
+        uses: artprinting3d-web/dfm-check@v1
         with:
           technology: fdm
           material: pla
